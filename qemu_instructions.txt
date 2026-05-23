@@ -1,0 +1,26 @@
+
+
+  // creer le disque virtuel
+  qemu-img create -f qcow2 debian.qcow2 40G
+
+
+
+pour l'installation
+qemu-system-x86_64 \
+  -enable-kvm \
+  -m 2048 \
+  -smp 4 \
+  -cpu host \
+  --cdrom debian.iso \
+  -drive file=debian.qcow2,format=qcow2,if=virtio-scsi \
+  -boot d (boot sur cd)
+
+
+
+ // lancer la vm
+ qemu-system-x86_64 \
+-enable-kvm \
+-m 4G \
+-smp 4 \
+-cpu host \
+-drive file=debian.qcow2,format=qcow2
