@@ -21,7 +21,7 @@ def mount_with_vm(dev):gi
         "-enable-kvm",
         "-m", "2048",
         "-cdrom", "/home/mathieu/projects/Quartzine/alpine-extended-3.23.4-x86_64.iso",
-        "-hda", "/home/mathieu/projects/Quartzine/vm/alpine-sandbox.qcow2",
+        "-drive", "file=/home/mathieu/projects/Quartzine/vm.qcow2,format=qcow2,if=virtio-scsi"
         "-boot", "d"
     ])
     """
@@ -30,7 +30,7 @@ def mount_with_vm(dev):gi
         "qemu-system-x86_64",
         "-enable-kvm",
         "-m", "2048",
-        "-hda", "/home/mathieu/projects/Quartzine/vm/alpine-sandbox.qcow2"
+        "-drive", "file=/home/mathieu/projects/Quartzine/vm.qcow2,format=qcow2,if=virtio-scsi"
 
     ])
 
