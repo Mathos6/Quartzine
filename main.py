@@ -15,6 +15,9 @@ def main():
         errors.append("Error: notify-send is not installed")
     if shutil.which('zenity') is None:
         errors.append("Error: zenity is not installed")
+    if shutil.which('virt-inspector') is None:
+        errors.append("Error: virt-inspector is not installed")
+
 
     if errors:
         for error in errors:

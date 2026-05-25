@@ -13,7 +13,7 @@
 When a USB drive is plugged into a Linux machine, Quartzine intercepts the event **before the OS mounts anything** — and asks what you want to do with it.
 
 - **Mount normally** → standard OS behavior
-- **Analyze** → a disposable VM receives the drive, opens it, navigates it like a real user would, while everything is observed from the host
+- **Mount with VM** → a disposable VM receives the drive, opens it, navigates it like a real user would.
 
 Designed for **malware analysis labs** that handle physically untrusted media.
 
@@ -28,7 +28,7 @@ USB plugged in
     │
     ├─ Mount normally? ──────────────── normal OS behavior
     │
-    └─ Analyze?
+    └─ Analyze(mount with VM)?
           │
           ├─ Clean VM snapshot spun up
           ├─ USB passed through to VM
