@@ -17,10 +17,12 @@ qemu-system-x86_64 \
 
 
 
- // lancer la vm
+ // lancer la vm avec le usb mount
  qemu-system-x86_64 \
 -enable-kvm \
--m 4G \
+-m 2048 \
 -smp 4 \
 -cpu host \
--drive file=debian.qcow2,format=qcow2
+-device qemu-xhci
+-device usb-host,vendorid=0xabcd,productid=0x1234
+-drive file=debian.qcow2,format=qcow2,if=virtio

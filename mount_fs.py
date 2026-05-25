@@ -1,42 +1,50 @@
 import subprocess
+import os
 
+from var import path_to_virtual_disk, virtual_disk_size
+
+# device node peut être /dev/sda1
 def mount_normally(device_node):
     subprocess.run(["udisksctl", "mount", "-b", device_node])
 
 
-def mount_with_vm(dev):gi
+def mount_with_vm(dev):
+
+    if not os.path.isfile(path_to_virtual_disk):
+        print(f"There's no file named {path_to_virtual_disk}")
+        return
+
     """
     # Création du disque virtuel
     subprocess.run([
-        "qemu-img",
-        "create",
-        "-f",
-        "qcow2", "/home/mathieu/projects/Quartzine/vm/alpine-sandbox.qcow2",
-        "10G"
+        "qemu-img", "create",
+        "-f", "qcow2",
+        path_to_virtual_disk,
+        virtual_disk_size
         ])
 
     # lancement de linstallation
     subprocess.run([
-        "qemu-system-x86_64",
-        "-enable-kvm",
-        "-m", "2048",
-        "-cdrom", "/home/mathieu/projects/Quartzine/alpine-extended-3.23.4-x86_64.iso",
-        "-drive", "file=/home/mathieu/projects/Quartzine/vm.qcow2,format=qcow2,if=virtio-scsi"
+        "qemu-system-x86_64", "-enable-kvm",
+        "-m", ram_usage,
+        "-cdrom", path_to_iso,
+        "-drive", f"file={path_to_virtual_disk},format=qcow2,if=virtio"
         "-boot", "d"
     ])
+
     """
     # Lancer la vm
     subprocess.run([
         "qemu-system-x86_64",
         "-enable-kvm",
         "-m", "2048",
-        "-drive", "file=/home/mathieu/projects/Quartzine/vm.qcow2,format=qcow2,if=virtio-scsi"
+        "-drive", f"file={path_to_virtual_disk},if=virtio"
 
     ])
 
 
 
-#mount_with_vm(1)
+mount_with_vm(1)
 # A ajouter au lancement de la vm pour le passthrough
 """
     "-usb",
