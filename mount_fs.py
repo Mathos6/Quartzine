@@ -11,19 +11,37 @@ def mount_normally(device_node):
 def mount_with_vm(dev):
 
     if not os.path.isfile(path_to_virtual_disk):
-        print(f"There's no file named {path_to_virtual_disk}")
-        return
+        print(f"There's no file named {path_to_virtual_disk}. Please create one at this location")
+        resp = input("do you want to create a disk now? (yes, no)").lower()
+        if resp == "yes":
+            create_virtual_disk()
+            print("Disk succesfully created at", path_to_virtual_disk)
+        else:
+            print("action aborted")
+            return
 
-    """
-    # Création du disque virtuel
+    print("You are about to install the OS in the virtual disk. ")
+    install_vm()
+    print("Installation succesfully completed")
+    print("Time to run it")
+    run_vm_with_passthrough(dev)
+
+
+
+
+mount_with_vm(1)
+
+
+
+def create_virtual_disk():
     subprocess.run([
         "qemu-img", "create",
         "-f", "qcow2",
         path_to_virtual_disk,
         virtual_disk_size
-        ])
+    ])
 
-    # lancement de linstallation
+def install_vm():
     subprocess.run([
         "qemu-system-x86_64", "-enable-kvm",
         "-m", ram_usage,
@@ -32,29 +50,15 @@ def mount_with_vm(dev):
         "-boot", "d"
     ])
 
-    """
-    # Lancer la vm
+def run_vm_with_passthrough(dev):
     subprocess.run([
         "qemu-system-x86_64",
         "-enable-kvm",
         "-m", "2048",
+        "smp", "4",
+        "-cpu", "host",
+        "-device", "qemu-xhci",
+        "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}"
         "-drive", f"file={path_to_virtual_disk},if=virtio"
 
     ])
-
-
-
-mount_with_vm(1)
-# A ajouter au lancement de la vm pour le passthrough
-"""
-    "-usb",
-    "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}"
-"""
-
-
-
-
-""""
-if __name__ == "__main__":
-    mount_normally(dev.device_node)
-"""
