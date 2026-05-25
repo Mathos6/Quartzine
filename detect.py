@@ -29,13 +29,4 @@ def detect_device(context):
             read_config(dev)
         elif action == "remove":
             print(f"[-] Périphérique retiré: {dev.device_node}")
-        print("The type is ", type(dev))
-        vendor_id = dev.get('ID_VENDOR_ID')
-        product_id = dev.get('ID_MODEL_ID')
 
-
-
-
-
-if __name__ == "__main__":
-    detect_device(context)

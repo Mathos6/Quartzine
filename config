@@ -3,7 +3,7 @@
 
 # Comportement au branchement USB
 # Valeurs : vm | normal | ask
-mode = normal
+mode = ask
 
 # Délai avant action automatique (en secondes, 0 = pas de délai)
 timeout = 30

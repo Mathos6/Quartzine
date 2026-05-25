@@ -1,12 +1,13 @@
-import subprocess
-import os
+import subprocess, os
 
 from var import path_to_virtual_disk, virtual_disk_size, cpu_cores, ram_usage, path_to_iso
 
 # device node peut être /dev/sda1
 def mount_normally(device_node):
-    subprocess.run(["udisksctl", "mount", "-b", device_node])
-
+    try:
+        subprocess.run(["udisksctl", "mount", "-b", device_node], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
 
 def mount_with_vm(dev):
 
@@ -19,10 +20,17 @@ def mount_with_vm(dev):
         else:
             print("action aborted")
             return
+    print("Checking virtual disk...")
+    result = subprocess.run(
+        ["virt-inspector", "-a", path_to_virtual_disk],
+        capture_output=True,
+        text=True
+    ).stdout
+    if "<name>" not in result:
+        print("You are about to install the OS in the virtual disk. ")
+        install_vm()
+        print("Installation succesfully completed")
 
-    print("You are about to install the OS in the virtual disk. ")
-    install_vm()
-    print("Installation succesfully completed")
     print("Time to run it")
     run_vm_with_passthrough(dev)
 
@@ -43,7 +51,7 @@ def install_vm():
         "qemu-system-x86_64", "-enable-kvm",
         "-m", ram_usage,
         "-cdrom", path_to_iso,
-        "-drive", f"file={path_to_virtual_disk},format=qcow2,if=virtio"
+        "-drive", f"file={path_to_virtual_disk},format=qcow2,if=virtio",
         "-boot", "d"
     ])
 
