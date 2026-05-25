@@ -4,4 +4,4 @@ __pycache__/
 *.iso
 
 *.qcow2
-vm/
+vm/disk/
