@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-from var import path_to_virtual_disk, virtual_disk_size
+from var import path_to_virtual_disk, virtual_disk_size, cpu_cores, ram_usage, path_to_iso
 
 # device node peut être /dev/sda1
 def mount_normally(device_node):
@@ -29,9 +29,6 @@ def mount_with_vm(dev):
 
 
 
-mount_with_vm(1)
-
-
 
 def create_virtual_disk():
     subprocess.run([
@@ -54,11 +51,11 @@ def run_vm_with_passthrough(dev):
     subprocess.run([
         "qemu-system-x86_64",
         "-enable-kvm",
-        "-m", "2048",
-        "smp", "4",
+        "-m", ram_usage,
+        "-smp", cpu_cores,
         "-cpu", "host",
         "-device", "qemu-xhci",
-        "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}"
-        "-drive", f"file={path_to_virtual_disk},if=virtio"
+        "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}",
+        "-drive", f"file={path_to_virtual_disk},format=qcow2,if=virtio"
 
     ])

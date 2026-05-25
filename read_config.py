@@ -11,6 +11,9 @@ def read_config(dev):
                 value = value.strip()
 
 
+
+    mount_with_vm(dev)
+"""
     if value == "normal":
         print("monter normalement")
         mount_normally(dev.device_node)
@@ -29,7 +32,7 @@ def read_config(dev):
             mount_normally(dev.device_node)
     else:
         print("Bad value at the config file")
-
+"""
 
 
 

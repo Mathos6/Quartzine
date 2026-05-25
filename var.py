@@ -7,3 +7,7 @@ virtual_disk_size = "20G"
 ram_usage = "2048"
 
 path_to_iso = "/home/mathieu/Bureau/alpine.iso"
+
+ram_usage = "2048"
+
+cpu_cores = "4"
