@@ -55,6 +55,7 @@ def install_vm():
         "-boot", "d"
     ])
 
+#TODO: when it'll be done, add the -snapshot flag'
 def run_vm_with_passthrough(dev):
     subprocess.run([
         "qemu-system-x86_64",

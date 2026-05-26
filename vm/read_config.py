@@ -1,7 +1,7 @@
 import subprocess
 from var import path_to_config_file
 
-from mount_fs import mount_normally, mount_with_vm
+from .mount_fs import mount_normally, mount_with_vm
 
 def read_config(dev):
 

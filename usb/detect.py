@@ -1,6 +1,6 @@
 
 import pyudev
-from read_config import read_config
+from vm.read_config import read_config
 
 def detect_device(context):
 

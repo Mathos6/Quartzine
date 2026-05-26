@@ -1,6 +1,6 @@
 import pyudev, shutil, sys
 
-from detect import detect_device
+from usb.detect import detect_device
 from var import Error
 
 def main():
