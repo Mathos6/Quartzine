@@ -1,0 +1,236 @@
+BEGIN {
+    printf("hello, world!!\n");
+}
+END {
+    printf("fin\n");
+}
+
+
+// Les tracepoints sont des événements exposés par Linux.
+/*
+tracepoint:syscalls:sys_enter_connect{
+    printf("%s (%d) se connecte\n", comm, pid);
+}
+*/
+
+
+// Permet d'intercepter une fonction du noyau.
+/*
+kprobe:do_sys_open
+{
+    printf("open appelé\n");
+}
+*/
+
+// Pour tracer une fonction utilisateur.
+/*
+uprobe:/bin/bash:readline
+{
+    printf("readline appelée\n");
+}
+*/
+
+// Variables locales
+/*
+BEGIN
+{
+    $x = 42;
+    printf("%d\n", $x);
+}
+*/
+
+
+// Variables globales (maps)
+/*
+BEGIN
+{
+    @compteur = 0;
+}
+*/
+
+/*
+6. Variables intégrées
+
+Quelques variables très utilisées :
+
+Variable	Description
+pid	PID du processus
+tid	Thread ID
+uid	User ID
+comm	Nom du processus
+cpu	CPU courant
+nsecs	Temps en nanosecondes
+*/
+
+
+
+/*
+Filtres Tracer seulement Bash :
+
+tracepoint:syscalls:sys_enter_openat
+/comm == "bash"/
+{
+    printf("bash ouvre un fichier\n");
+}
+*/
+
+
+/*
+8. Histogrammes
+
+Très puissant pour les performances.
+
+tracepoint:syscalls:sys_enter_read
+{
+    @reads = hist(args->count);
+}
+
+Résultat :
+
+[0,1)       15
+[1,2)       28
+[2,4)       55
+...
+*/
+
+/*
+9. Mesurer le temps d'une fonction
+
+Début :
+
+kprobe:vfs_read
+{
+    @start[tid] = nsecs;
+}
+
+Fin :
+
+kretprobe:vfs_read
+/@start[tid]/
+{
+    @latence = hist(nsecs - @start[tid]);
+    delete(@start[tid]);
+}
+
+On mesure la durée d'exécution de vfs_read.
+
+C'est une technique fondamentale du profiling.
+*/
+
+
+
+/*
+10. Arguments
+
+Pour les tracepoints :
+
+tracepoint:syscalls:sys_enter_openat
+{
+    printf("%s\n", str(args->filename));
+}
+
+Pour découvrir les arguments :
+
+bpftrace -lv tracepoint:syscalls:sys_enter_openat
+*/
+
+
+/*
+11. Comptage par processus
+tracepoint:syscalls:sys_enter_openat
+{
+    @[comm] = count();
+}
+
+Sortie :
+
+bash      120
+python    500
+firefox   3000
+*/
+
+/*
+12. Top des syscalls
+tracepoint:raw_syscalls:sys_enter
+{
+    @[args->id] = count();
+}
+
+À la fin :
+
+END
+{
+    print(@);
+}
+*/
+
+/*
+13. Exemple pratique : qui ouvre le plus de fichiers ?
+tracepoint:syscalls:sys_enter_openat
+{
+    @[comm] = count();
+}
+
+Après quelques secondes :
+
+chrome      12000
+systemd      5000
+bash           50
+*/
+
+/*
+14. Exemple pratique : fichiers ouverts
+tracepoint:syscalls:sys_enter_openat
+{
+    printf("%s -> %s\n",
+           comm,
+           str(args->filename));
+}
+
+Sortie :
+
+bash -> /etc/passwd
+python -> config.json
+nginx -> access.log
+*/
+
+/*
+15. Outils avancés
+
+Quelques agrégateurs :
+
+count()
+sum()
+avg()
+min()
+max()
+stats()
+hist()
+lhist()
+
+Exemple :
+
+tracepoint:syscalls:sys_enter_read
+{
+    @taille = avg(args->count);
+}
+*/
+
+/*
+16. Ressources pour progresser
+Documentation officielle bpftrace : https://bpftrace.org/docs/release_024/language?utm_source=chatgpt.com
+
+Guide eBPF de Brendan Gregg : https://www.brendangregg.com/ebpf.html?utm_source=chatgpt.com
+
+Brendan Gregg est l'une des références majeures du domaine.
+Parcours conseillé
+Comprendre les tracepoints.
+Apprendre les maps (@).
+Utiliser hist() et count().
+Mesurer des latences avec kprobe + kretprobe.
+Étudier eBPF lui-même.
+Lire les scripts fournis avec bpftrace.
+
+Après ça, tu pourras écrire des outils de profiling qui donnent l'impression de lire les pensées du noyau Linux. Ce qui est utile, parce que le noyau a souvent plus de sens que les applications qui tournent dessus.
+*/
+

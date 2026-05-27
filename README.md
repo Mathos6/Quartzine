@@ -36,24 +36,6 @@ USB plugged in
           ├─ eBPF + network tap observe everything
           ├─ Report generated
           └─ VM destroyed. Nothing persists.
-```
-
----
-
-## Key properties
-
-**Hardware-triggered** — interception happens at plug-in, not at manual file submission. No human step required.
-
-**Deceptive environment** — the VM mimics a real user machine. Hypervisor artifacts are masked, fake activity history is present. Evasive malware finds what it expects.
-
-**Host-side observation** — eBPF probes run from the host, invisible to anything executing inside the VM.
-
-**Isolated network** — simulated internet via INetSim. The VM never reaches real infrastructure.
-
-**Ephemeral by design** — every analysis starts from a clean snapshot, destroyed on completion.
-
-**Structured reports** — network calls, filesystem changes, spawned processes, exported as JSON.
-
 ---
 
 ## Stack
@@ -61,10 +43,9 @@ USB plugged in
 | Layer | Tools |
 |---|---|
 | USB detection | `udev rules`, `pyudev` |
-| VM orchestration | `Python`, `libvirt-python`, `QEMU/KVM` |
-| Host observation | `eBPF`, `bpftrace`, `Zeek` |
+| VM orchestration | `Python`, `QEMU/KVM` |
+| Host observation | `eBPF`, `bpftrace` |
 | Network simulation | `INetSim`, `tcpdump` |
-| Snapshots | `LVM` or `ZFS` |
 
 ---
 
@@ -73,10 +54,6 @@ USB plugged in
 - Linux x86_64 with KVM support
 - Python 3.10+
 
-```bash
-pip install pyudev libvirt-python
-apt install qemu-kvm libvirt-daemon bpftrace zeek inetutils
-```
 
 ---
 
@@ -95,14 +72,6 @@ Planned milestones:
 
 ---
 
-## Warning
-
-This tool is intended for **controlled lab environments only**.
-Never deploy on production machines or outside a properly isolated network.
-
----
-
 ## License
 
 GNU General Public License v3.0 — see [LICENSE](LICENSE) for details.
-
