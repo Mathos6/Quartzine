@@ -36,6 +36,7 @@ USB plugged in
           ├─ eBPF + network tap observe everything
           ├─ Report generated
           └─ VM destroyed. Nothing persists.
+```
 ---
 
 ## Stack
@@ -53,6 +54,16 @@ USB plugged in
 
 - Linux x86_64 with KVM support
 - Python 3.10+
+
+
+---
+
+## Installation
+
+`git clone https://github.com/Mathos6/Quartzine` or `git clone git@github.com:Mathos6/Quartzine.git`
+`chmod +x Quartzine/configd/install.sh`
+`sudo ./Quartzine/configd/install.sh`
+
 
 
 ---
