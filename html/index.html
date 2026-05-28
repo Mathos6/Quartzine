@@ -22,19 +22,22 @@
   </header>
 
   <section>
-    <h2>What it does</h2>
+    <h2>What is Quartzine?</h2>
     <p>
-      Quartzine sits between your hardware and your OS. The moment a USB drive is plugged in,
-      it intercepts the event before the kernel mounts anything — and asks what you want to do with it.
+      When a USB drive is plugged into a Linux machine, Quartzine intercepts the event
+      <strong style="color:#fff">before the OS mounts anything</strong> — and asks what you want to do with it.
     </p>
-    <p>
-      Mount it normally, or hand it to a disposable VM that will open it, explore it,
-      and let you watch exactly what happens.
+    <ul style="margin: 12px 0 0 20px; font-size: 15px; color: var(--text); line-height: 2;">
+      <li><strong style="color:#fff">Mount normally</strong> → standard OS behavior</li>
+      <li><strong style="color:#fff">Mount with VM</strong> → a disposable VM receives the drive, opens it, navigates it like a real user would</li>
+    </ul>
+    <p style="margin-top: 12px;">
+      Designed for <strong style="color:#fff">malware analysis labs</strong> that handle physically untrusted media.
     </p>
   </section>
 
   <section>
-    <h2>Flow</h2>
+    <h2>How it works</h2>
     <div class="flow">
       <div><span class="node">USB plugged in</span></div>
       <div><span class="arrow">  │</span></div>
@@ -42,50 +45,14 @@
       <div><span class="arrow">  │</span></div>
       <div><span class="arrow">  ├─ </span><span class="node">Mount normally?</span><span class="arrow">  ──────────────────── normal OS behavior</span></div>
       <div><span class="arrow">  │</span></div>
-      <div><span class="arrow">  └─ </span><span class="danger">Analyze?</span></div>
+      <div><span class="arrow">  └─ </span><span class="danger">Analyze (mount with VM)?</span></div>
       <div><span class="arrow">        │</span></div>
-      <div><span class="arrow">        ├─ </span><span class="highlight">Spin up clean VM snapshot</span></div>
+      <div><span class="arrow">        ├─ </span><span class="highlight">Clean VM snapshot spun up</span></div>
       <div><span class="arrow">        ├─ </span><span class="node">USB passthrough → VM</span></div>
       <div><span class="arrow">        ├─ </span><span class="node">VM opens &amp; navigates the drive</span></div>
       <div><span class="arrow">        ├─ </span><span class="highlight">eBPF + network tap observe everything</span></div>
-      <div><span class="arrow">        ├─ </span><span class="node">Report generated</span></div>
+      <div><span class="arrow">        ├─ </span><span class="node">Report generated (optional)</span></div>
       <div><span class="arrow">        └─ </span><span class="danger">VM destroyed</span><span class="arrow">. Nothing persists.</span></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Key properties</h2>
-    <div class="features">
-      <div class="feature">
-        <div class="feature-icon">⚡</div>
-        <div class="feature-title">Hardware-triggered</div>
-        <p class="feature-desc">Intercepts at plug-in, not at file submission. No manual steps.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">🎭</div>
-        <div class="feature-title">Deceptive environment</div>
-        <p class="feature-desc">VM mimics a real user machine. Masked hypervisor artifacts, fake activity history.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">👁</div>
-        <div class="feature-title">Host-side observation</div>
-        <p class="feature-desc">eBPF probes from the host. Invisible to anything running inside the VM.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">🔌</div>
-        <div class="feature-title">Isolated network</div>
-        <p class="feature-desc">Simulated internet via INetSim. The VM never touches real infrastructure.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">🗑</div>
-        <div class="feature-title">Ephemeral by design</div>
-        <p class="feature-desc">Every analysis starts from a clean snapshot. Destroyed on completion.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">📄</div>
-        <div class="feature-title">Structured reports</div>
-        <p class="feature-desc">Network calls, filesystem changes, processes — exported as JSON.</p>
-      </div>
     </div>
   </section>
 
@@ -93,40 +60,31 @@
     <h2>Stack</h2>
     <table>
       <tr>
-        <td>Detection</td>
+        <td>USB Detection</td>
         <td>
           <span class="tag">udev rules</span>
           <span class="tag">pyudev</span>
         </td>
       </tr>
       <tr>
-        <td>Orchestration</td>
+        <td>VM Orchestration</td>
         <td>
           <span class="tag">Python</span>
-          <span class="tag">libvirt-python</span>
           <span class="tag">QEMU/KVM</span>
         </td>
       </tr>
       <tr>
-        <td>Observation</td>
+        <td>Host Observation</td>
         <td>
           <span class="tag">eBPF</span>
           <span class="tag">bpftrace</span>
-          <span class="tag">Zeek</span>
         </td>
       </tr>
       <tr>
-        <td>Network sim</td>
+        <td>Network Simulation</td>
         <td>
           <span class="tag">INetSim</span>
           <span class="tag">tcpdump</span>
-        </td>
-      </tr>
-      <tr>
-        <td>VM snapshots</td>
-        <td>
-          <span class="tag">LVM</span>
-          <span class="tag">ZFS</span>
         </td>
       </tr>
     </table>
@@ -136,11 +94,31 @@
     <h2>Requirements</h2>
     <div class="code-block">
       <div><span class="comment"># Host OS</span></div>
-      <div><span class="cmd">Linux with KVM support (x86_64)</span></div>
-      <div>&nbsp;</div>
-      <div><span class="comment"># Dependencies</span></div>
-      <div><span class="prompt">$ </span><span class="cmd">pip install pyudev libvirt-python</span></div>
-      <div><span class="prompt">$ </span><span class="cmd">apt install qemu-kvm libvirt-daemon bpftrace zeek inetutils</span></div>
+      <div><span class="cmd">Linux x86_64 with KVM support — Python 3.10+</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Installation</h2>
+    <div class="code-block">
+      <div><span class="prompt">$ </span><span class="cmd">git clone https://github.com/Mathos6/Quartzine</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">chmod +x Quartzine/configd/install.sh</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">sudo ./Quartzine/configd/install.sh</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Status</h2>
+    <p>Early development. Not ready for production use.</p>
+    <div style="margin-top: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+      <div style="margin-bottom: 8px; color: var(--muted);">Planned milestones</div>
+      <div class="milestone done">✓ &nbsp;udev interception + user prompt</div>
+      <div class="milestone done">✓ &nbsp;USB passthrough to VM</div>
+      <div class="milestone">○ &nbsp;QEMU snapshot lifecycle management</div>
+      <div class="milestone">○ &nbsp;eBPF observation layer</div>
+      <div class="milestone">○ &nbsp;Network isolation + INetSim integration</div>
+      <div class="milestone">○ &nbsp;JSON report generation</div>
+      <div class="milestone">○ &nbsp;Anti-evasion VM hardening</div>
     </div>
   </section>
 
@@ -162,4 +140,3 @@
 </div>
 </body>
 </html>
-
