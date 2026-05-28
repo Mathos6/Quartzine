@@ -1,0 +1,14 @@
+[Unit]
+Description=Quartzine USB Sandbox
+After=systemd-udevd.service
+Requires=systemd-udevd.service
+
+[Service]
+StandardOutput=journal
+StandardError=journal
+WorkingDirectory=/opt/Quartzine
+ExecStart=/usr/bin/python3 /opt/Quartzine/main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

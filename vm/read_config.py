@@ -1,25 +1,17 @@
 import subprocess
-from var import path_to_config_file
+from var import config
 
 from .mount_fs import mount_normally, mount_with_vm
 
 def read_config(dev):
-
-    with open(path_to_config_file, 'r') as file:
-        for line in file:
-            if line.startswith("mode") and "=" in line:
-                _, value = line.split("=", 1)
-                value = value.strip()
-
-
-
-    if value == "normal":
+    mode = config["mode"]
+    if mode == "normal":
         print("monter normalement")
         mount_normally(dev.device_node)
-    elif value == "vm":
+    elif mode == "vm":
         print("monter dans la vm")
         mount_with_vm(dev)
-    elif value == "ask":
+    elif mode == "ask":
         subprocess.run(["notify-send", "Quartzine", "Clé USB détectée"])
         resp = subprocess.run(["zenity", "--question", "--text=Monter dans la VM?"], capture_output=True)
         if resp.returncode == 0:

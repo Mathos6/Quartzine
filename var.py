@@ -1,21 +1,22 @@
 
 from enum import Enum
 
+config = {}
 
-path_to_virtual_disk = "/home/mathieu/projects/Quartzine/vm/vm.qcow2"
+with open("configd/config.toml", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line and not line.startswith("#"):
+            key, value = line.split("=", 1)
+            config[key.strip()] = value.strip().strip('"')
 
 virtual_disk_size = "20G"
 
 ram_usage = "2048"
 
-path_to_iso = "/home/mathieu/Bureau/alpine.iso"
-
 ram_usage = "2048"
 
 cpu_cores = "4"
-
-path_to_config_file = "/home/mathieu/projects/Quartzine/config"
-
 
 class Error(Enum):
     MISSING_DEPENDENCY = 1

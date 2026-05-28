@@ -1,6 +1,6 @@
 import subprocess, os
 
-from var import path_to_virtual_disk, virtual_disk_size, cpu_cores, ram_usage, path_to_iso
+from var import config, virtual_disk_size, cpu_cores, ram_usage
 
 # device node peut être /dev/sda1
 def mount_normally(device_node):
@@ -11,18 +11,18 @@ def mount_normally(device_node):
 
 def mount_with_vm(dev):
 
-    if not os.path.isfile(path_to_virtual_disk):
-        print(f"There's no file named {path_to_virtual_disk}. Please create one at this location")
+    if not os.path.isfile(config["path_to_virtual_disk"]):
+        print(f"There's no file named {config['path_to_virtual_disk']}. Please create one at this location")
         resp = input("do you want to create a disk now? (yes, no)").lower()
         if resp == "yes":
             create_virtual_disk()
-            print("Disk succesfully created at", path_to_virtual_disk)
+            print("Disk succesfully created at", config["path_to_virtual_disk"])
         else:
             print("action aborted")
             return
     print("Checking virtual disk...")
     result = subprocess.run(
-        ["virt-inspector", "-a", path_to_virtual_disk],
+        ["virt-inspector", "-a", config["path_to_virtual_disk"]],
         capture_output=True,
         text=True
     ).stdout
@@ -42,7 +42,7 @@ def create_virtual_disk():
     subprocess.run([
         "qemu-img", "create",
         "-f", "qcow2",
-        path_to_virtual_disk,
+        config["path_to_virtual_disk"],
         virtual_disk_size
     ])
 
@@ -51,7 +51,7 @@ def install_vm():
         "qemu-system-x86_64", "-enable-kvm",
         "-m", ram_usage,
         "-cdrom", path_to_iso,
-        "-drive", f"file={path_to_virtual_disk},format=qcow2,if=virtio",
+        "-drive", f"file={config['path_to_virtual_disk']},format=qcow2,if=virtio",
         "-boot", "d"
     ])
 
@@ -65,6 +65,6 @@ def run_vm_with_passthrough(dev):
         "-cpu", "host",
         "-device", "qemu-xhci",
         "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}",
-        "-drive", f"file={path_to_virtual_disk},format=qcow2,if=virtio"
+        "-drive", f"file={config['path_to_virtual_disk']},format=qcow2,if=virtio"
 
     ])
