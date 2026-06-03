@@ -1,0 +1,11 @@
+BEGIN {
+    printf("Surveillance of the VM\n");
+    printf("PID cible = %d\n", $1);
+}
+
+
+tracepoint:syscalls:sys_enter_read
+/ pid == $1 /
+{
+    printf("%s enter open", comm);
+}

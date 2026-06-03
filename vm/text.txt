@@ -1,0 +1,4 @@
+Attaching 2 probes...
+Surveillance of the VM
+PID cible = 17875
+qemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter openqemu-system-x86 enter open

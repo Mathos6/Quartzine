@@ -3,7 +3,7 @@ from var import config
 
 from .mount_fs import mount_normally, mount_with_vm
 
-def read_config(dev):
+def handle_device(dev):
     mode = config["mode"]
     if mode == "normal":
         print("monter normalement")
