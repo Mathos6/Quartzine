@@ -1,6 +1,6 @@
 
 import pyudev, time, subprocess
-from vm.read_config import read_config
+from vm.handle_device import handle_device
 from var import config
 import var
 
@@ -32,7 +32,7 @@ def detect_device(context):
                 block_usb(dev)
                 continue
             else:
-                read_config(dev)
+                handle_device(dev)
 
 
 def recently_mounted(dev) -> bool :
