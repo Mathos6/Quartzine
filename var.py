@@ -20,3 +20,8 @@ cpu_cores = "4"
 
 class Error(Enum):
     MISSING_DEPENDENCY = 1
+
+
+
+last_time = 0
+last_device = None

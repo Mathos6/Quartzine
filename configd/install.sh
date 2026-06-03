@@ -11,8 +11,8 @@ sudo cp quartzine.service /etc/systemd/system/
 sudo mkdir -p /opt/Quartzine
 
 # a modifier
+sudo +x "$SCRIPT_DIR"/../usb/block.sh
 sudo cp -r "$SCRIPT_DIR"/../* /opt/Quartzine/
-
 echo "Specify the path where you want want to create your virtual disk"
 read -p  "> " path_to_virtual_disk
 read -p "Where do your image file lives ? >" path_to_iso

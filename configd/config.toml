@@ -17,3 +17,7 @@ path_to_virtual_disk = "/home/mathieu/projects/Quartzine/vm/disk/vm.qcow2"
 
 # path of the iso
 path_to_iso = "/home/mathieu/Bureau/alpine.iso"
+
+
+# root of project
+project_root = "/home/mathieu/projects/Quartzine"

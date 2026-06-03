@@ -1,6 +1,7 @@
-import subprocess, os
+import subprocess, os, time
 
 from var import config, virtual_disk_size, cpu_cores, ram_usage
+import var
 
 # device node peut être /dev/sda1
 def mount_normally(device_node):
@@ -57,6 +58,7 @@ def install_vm():
 
 #TODO: when it'll be done, add the -snapshot flag'
 def run_vm_with_passthrough(dev):
+    global last_time
     subprocess.run([
         "qemu-system-x86_64",
         "-enable-kvm",
@@ -68,3 +70,5 @@ def run_vm_with_passthrough(dev):
         "-drive", f"file={config['path_to_virtual_disk']},format=qcow2,if=virtio"
 
     ])
+
+    var.last_time = time.time()
