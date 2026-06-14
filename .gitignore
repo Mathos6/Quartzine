@@ -2,6 +2,6 @@
 __pycache__/
 
 *.iso
-
+.env
 *.qcow2
 vm/disk/
