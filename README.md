@@ -60,7 +60,26 @@ USB plugged in
 
 ## Installation
 
-`git clone https://github.com/Mathos6/Quartzine` or `git clone git@github.com:Mathos6/Quartzine.git`
+Clone the repository by executing:
+
+```
+
+git clone https://github.com/Mathos6/Quartzine
+
+
+```
+
+OR
+
+```
+
+git clone git@github.com:Mathos6/Quartzine.git
+
+
+```
+
+Then, run:
+
 `chmod +x Quartzine/configd/install.sh`
 `sudo ./Quartzine/configd/install.sh`
 
@@ -73,13 +92,16 @@ USB plugged in
 Early development. Not ready for production use.
 
 Planned milestones:
-- [ ] udev interception + user prompt
+- [x] udev interception + user prompt
 - [ ] QEMU snapshot lifecycle management
-- [ ] USB passthrough to VM
+- [x] USB passthrough to VM
 - [ ] eBPF observation layer
 - [ ] Network isolation + INetSim integration
 - [ ] JSON report generation
 - [ ] Anti-evasion VM hardening
+
+> [!CAUTION]
+> The project may not function yet in your hardware because the systemd service is not fully written yet
 
 ---
 
