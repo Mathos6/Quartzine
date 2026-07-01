@@ -66,7 +66,6 @@ Clone the repository by executing:
 
 git clone https://github.com/Mathos6/Quartzine
 
-
 ```
 
 OR
@@ -75,13 +74,16 @@ OR
 
 git clone git@github.com:Mathos6/Quartzine.git
 
-
 ```
 
 Then, run:
 
-`chmod +x Quartzine/configd/install.sh`
-`sudo ./Quartzine/configd/install.sh`
+```
+
+chmod +x Quartzine/configd/install.sh
+sudo ./Quartzine/configd/install.sh
+
+```
 
 
 
