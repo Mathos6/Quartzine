@@ -1,6 +1,11 @@
-import subprocess, os, time
+import subprocess
+import os
+import time
 
-from var import config, virtual_disk_size, cpu_cores, ram_usage
+from var import (
+    config, virtual_disk_size,
+    cpu_cores, ram_usage, path_to_iso,
+)
 import var
 
 # device node peut être /dev/sda1
@@ -10,8 +15,8 @@ def mount_normally(device_node):
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
 
-def mount_with_vm(dev):
 
+def mount_with_vm(dev):
     if not os.path.isfile(config["path_to_virtual_disk"]):
         print(f"There's no file named {config['path_to_virtual_disk']}. Please create one at this location")
         resp = input("do you want to create a disk now? (yes, no)").lower()

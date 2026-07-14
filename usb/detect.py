@@ -1,5 +1,8 @@
 
-import pyudev, time, subprocess
+import pyudev
+import time
+import subprocess
+
 from vm.handle_device import handle_device
 from var import config
 import var
@@ -17,7 +20,6 @@ def detect_device(context):
     print("En attente de périphériques...")
 
     # device est un tuple (str, <class 'pyudev.device._device.Device'>
-    devices = list()
     for device in monitor:
         action, dev = device
 
@@ -35,7 +37,7 @@ def detect_device(context):
                 handle_device(dev)
 
 
-def recently_mounted(dev) -> bool :
+def recently_mounted(dev: pyudev.device._device.Device) -> bool :
     if dev.get("ID_SERIAL") == var.last_device and time.time() - var.last_time < 10:
         var.last_time = time.time()
         return True
@@ -45,5 +47,5 @@ def recently_mounted(dev) -> bool :
     return False
 
 
-def block_usb(dev):
+def block_usb(dev: pyudev.device._device.Device):
     subprocess.run(["/bin/bash", f"{project_root}/usb/block.sh", f"{dev.device_node}"])

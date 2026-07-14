@@ -18,6 +18,11 @@ ram_usage = "2048"
 
 cpu_cores = "4"
 
+
+# L'utilisateur pourrait le specifier s'il veut sa propre distro
+# Pas encore intégré
+path_to_iso = ""
+
 class Error(Enum):
     MISSING_DEPENDENCY = 1
 
