@@ -14,127 +14,73 @@
       <span class="badge gpl">GPL v3</span>
       <span class="badge status">Early Development</span>
       <span class="badge">Linux</span>
-      <span class="badge">Python</span>
-      <span class="badge">KVM/QEMU</span>
     </div>
-    <h1>Q<span>uartzin</span>e</h1>
-    <div class="tagline">// USB interception & sandboxed analysis for malware labs</div>
+    <h1>Quartzine</h1>
+    <div class="tagline">USB interception &amp; sandboxed analysis for malware labs</div>
+    <div class="links">
+      <a href="https://github.com/Mathos6/Quartzine">github.com/Mathos6/Quartzine</a>
+      <a href="mailto:kanijeremie06@gmail.com">kanijeremie06@gmail.com</a>
+    </div>
   </header>
 
   <section>
     <h2>What is Quartzine?</h2>
     <p>
       When a USB drive is plugged into a Linux machine, Quartzine intercepts the event
-      <strong style="color:#fff">before the OS mounts anything</strong> — and asks what you want to do with it.
+      before the OS mounts anything, and lets you choose what happens next.
     </p>
-    <ul style="margin: 12px 0 0 20px; font-size: 15px; color: var(--text); line-height: 2;">
-      <li><strong style="color:#fff">Mount normally</strong> → standard OS behavior</li>
-      <li><strong style="color:#fff">Mount with VM</strong> → a disposable VM receives the drive, opens it, navigates it like a real user would</li>
+    <ul>
+      <li><strong>Mount normally</strong> — standard OS behavior</li>
+      <li><strong>Open in a VM</strong> — the drive is passed through to a disposable virtual machine instead of the host</li>
     </ul>
-    <p style="margin-top: 12px;">
-      Designed for <strong style="color:#fff">malware analysis labs</strong> that handle physically untrusted media.
-    </p>
+    <p>Built for environments that handle physically untrusted media, like a school or lab where USB keys move between machines.</p>
   </section>
 
   <section>
     <h2>How it works</h2>
     <div class="flow">
-      <div><span class="node">USB plugged in</span></div>
-      <div><span class="arrow">  │</span></div>
-      <div><span class="arrow">  ├─ </span><span class="highlight">udev intercepts</span><span class="arrow"> (before udisks2 mounts)</span></div>
-      <div><span class="arrow">  │</span></div>
-      <div><span class="arrow">  ├─ </span><span class="node">Mount normally?</span><span class="arrow">  ──────────────────── normal OS behavior</span></div>
-      <div><span class="arrow">  │</span></div>
-      <div><span class="arrow">  └─ </span><span class="danger">Analyze (mount with VM)?</span></div>
-      <div><span class="arrow">        │</span></div>
-      <div><span class="arrow">        ├─ </span><span class="highlight">Clean VM snapshot spun up</span></div>
-      <div><span class="arrow">        ├─ </span><span class="node">USB passthrough → VM</span></div>
-      <div><span class="arrow">        ├─ </span><span class="node">VM opens &amp; navigates the drive</span></div>
-      <div><span class="arrow">        ├─ </span><span class="highlight">eBPF + network tap observe everything</span></div>
-      <div><span class="arrow">        ├─ </span><span class="node">Report generated (optional)</span></div>
-      <div><span class="arrow">        └─ </span><span class="danger">VM destroyed</span><span class="arrow">. Nothing persists.</span></div>
+      <div>USB plugged in</div>
+      <div class="arrow">↓ udev intercepts, before udisks2 mounts</div>
+      <div class="branch">Mount normally → standard OS behavior</div>
+      <div class="branch">Open in VM → device passed through to QEMU/KVM, nothing touches the host</div>
     </div>
   </section>
 
   <section>
     <h2>Stack</h2>
     <table>
-      <tr>
-        <td>USB Detection</td>
-        <td>
-          <span class="tag">udev rules</span>
-          <span class="tag">pyudev</span>
-        </td>
-      </tr>
-      <tr>
-        <td>VM Orchestration</td>
-        <td>
-          <span class="tag">Python</span>
-          <span class="tag">QEMU/KVM</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Host Observation</td>
-        <td>
-          <span class="tag">eBPF</span>
-          <span class="tag">bpftrace</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Network Simulation</td>
-        <td>
-          <span class="tag">INetSim</span>
-          <span class="tag">tcpdump</span>
-        </td>
-      </tr>
+      <tr><td>USB detection</td><td>udev rules, pyudev</td></tr>
+      <tr><td>VM orchestration</td><td>Python, QEMU/KVM</td></tr>
+      <tr><td>Config</td><td>TOML</td></tr>
+      <tr><td>Service</td><td>systemd</td></tr>
     </table>
   </section>
 
   <section>
     <h2>Requirements</h2>
-    <div class="code-block">
-      <div><span class="comment"># Host OS</span></div>
-      <div><span class="cmd">Linux x86_64 with KVM support — Python 3.10+</span></div>
-    </div>
+    <div class="code-block">Linux x86_64 with KVM support — Python 3.10+</div>
   </section>
 
   <section>
     <h2>Installation</h2>
     <div class="code-block">
-      <div><span class="prompt">$ </span><span class="cmd">git clone https://github.com/Mathos6/Quartzine</span></div>
-      <div><span class="prompt">$ </span><span class="cmd">chmod +x Quartzine/configd/install.sh</span></div>
-      <div><span class="prompt">$ </span><span class="cmd">sudo ./Quartzine/configd/install.sh</span></div>
+      <div>git clone https://github.com/Mathos6/Quartzine</div>
+      <div>chmod +x Quartzine/configd/install.sh</div>
+      <div>sudo ./Quartzine/configd/install.sh</div>
     </div>
+    <p>A VM disk image (.qcow2) is needed for VM mode — path is set in <code>configd/config.toml</code>.</p>
   </section>
 
   <section>
     <h2>Status</h2>
-    <p>Early development. Not ready for production use.</p>
-    <div style="margin-top: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
-      <div style="margin-bottom: 8px; color: var(--muted);">Planned milestones</div>
-      <div class="milestone done">✓ &nbsp;udev interception + user prompt</div>
-      <div class="milestone done">✓ &nbsp;USB passthrough to VM</div>
-      <div class="milestone">○ &nbsp;QEMU snapshot lifecycle management</div>
-      <div class="milestone">○ &nbsp;eBPF observation layer</div>
-      <div class="milestone">○ &nbsp;Network isolation + INetSim integration</div>
-      <div class="milestone">○ &nbsp;JSON report generation</div>
-      <div class="milestone">○ &nbsp;Anti-evasion VM hardening</div>
-    </div>
-  </section>
-
-  <section>
+    <p>Early development, built and maintained solo. Working: udev interception, USB passthrough to a VM. In progress: VM lifecycle management, headless/systemd display handling. Planned: host-side observation (eBPF), network isolation, report generation.</p>
     <div class="warning">
-      <strong>⚠ Warning</strong>
-      This tool is intended for controlled lab environments only.
-      Never use on production machines or with drives from untrusted sources outside a properly isolated network.
+      Not ready for production use. Test on a disposable machine, not one you rely on.
     </div>
   </section>
 
   <footer>
-    <div class="footer-left">
-      <span>Quartzine</span> — USB Sandbox Interceptor<br>
-      Licensed under <span>GNU GPL v3</span>
-    </div>
+    Quartzine — USB Sandbox Interceptor — GNU GPL v3
   </footer>
 
 </div>
