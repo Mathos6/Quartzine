@@ -84,6 +84,13 @@ You'll need a VM disk image (`.qcow2`) available before the VM mode works — se
 
 ---
 
+## Credentials in the XFCE DE
+
+The `root`'s password is `esther`
+
+There is another user named `mathieu` and his password is `esther` too. 
+
+---
 
 ## Uninstallation
 
@@ -91,7 +98,9 @@ Run:
 
 ```
 configd/uninstall.sh
-````
+```
+  
+---
 
 ## Status
 

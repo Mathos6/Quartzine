@@ -2,10 +2,7 @@ import subprocess
 import os
 import time
 
-from var import (
-    config, virtual_disk_size,
-    cpu_cores, ram_usage, path_to_iso,
-)
+from var import config
 import var
 
 # device node peut être /dev/sda1
@@ -49,14 +46,14 @@ def create_virtual_disk():
         "qemu-img", "create",
         "-f", "qcow2",
         config["path_to_virtual_disk"],
-        virtual_disk_size
+        config["virtual_disk_size"]
     ])
 
 def install_vm():
     subprocess.run([
         "qemu-system-x86_64", "-enable-kvm",
-        "-m", ram_usage,
-        "-cdrom", path_to_iso,
+        "-m", config["ram_usage"],
+        "-cdrom", config["path_to_iso"],
         "-drive", f"file={config['path_to_virtual_disk']},format=qcow2,if=virtio",
         "-boot", "d"
     ])
@@ -67,8 +64,8 @@ def run_vm_with_passthrough(dev):
     subprocess.run([
         "qemu-system-x86_64",
         "-enable-kvm",
-        "-m", ram_usage,
-        "-smp", cpu_cores,
+        "-m", config["ram_usage"],
+        "-smp", config["cpu_cores"],
         "-cpu", "host",
         "-device", "qemu-xhci",
         "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}",
