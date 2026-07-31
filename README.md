@@ -84,6 +84,15 @@ You'll need a VM disk image (`.qcow2`) available before the VM mode works — se
 
 ---
 
+
+## Uninstallation
+
+Run:
+
+```
+configd/uninstall.sh
+````
+
 ## Status
 
 Early development, built and maintained solo. This is a learning project as much as a security tool — expect rough edges.
