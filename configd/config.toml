@@ -9,15 +9,23 @@ mode = "ask"
 timeout = 30
 
 # Dossier de sortie des rapports (s'il y en a)
-report_dir = "/var/log/quartzine/reports"
+report_dir = "/var/log/quartzine/reports/"
 
 
 # path of the virtual disk
-path_to_virtual_disk = "/home/mathieu/projects/Quartzine/vm/disk/vm.qcow2"
+path_to_virtual_disk = "/home/mathieu/projects/Quartzine/vm/disk/alpine"
 
-# path of the iso
+# path of the iso (You can modify it to match your iso installation if you want to install your own OS)
 path_to_iso = "/home/mathieu/Bureau/alpine.iso"
 
 
 # root of project
 project_root = "/home/mathieu/projects/Quartzine"
+
+
+virtual_disk_size = "20G"
+
+ram_usage = "2048"
+
+cpu_cores = "4"
+
