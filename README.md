@@ -27,39 +27,22 @@ When a USB drive is plugged into a Linux machine, Quartzine intercepts the event
 
 ## How it works
 
-```
-USB plugged in
-    │
-    ├─ udev rule blocks auto-mount, Quartzine daemon catches the event
-    │
-    ├─ Mount normally? ──────────────── standard OS behavior
-    │
-    └─ Open in VM?
-          │
-          ├─ QEMU/KVM VM started
-          ├─ USB device passed through to the VM (not just an image mount)
-          └─ Drive is only ever touched inside the VM
-```
+1. USB plugged in
+
+2. udev rule blocks auto-mount, Quartzine daemon catches the event
+
+3. Based on config, the usb is either mounted normally on in a VM (alpine) running on qemu/kvm
 
 ---
 
-## Stack
-
-| Layer | Tools |
-|---|---|
-| USB detection | `udev` rules, `pyudev` |
-| VM orchestration | Python, QEMU/KVM |
-| Config | TOML |
-| Service | systemd |
-
----
 
 ## Requirements
 
-- Linux x86_64 with KVM support
+- Linux with KVM support
 - Python 3.10+
 
 ---
+
 
 ## Installation
 
@@ -76,11 +59,8 @@ git clone git@github.com:Mathos6/Quartzine.git
 Then:
 
 ```
-chmod +x Quartzine/configd/install.sh
 sudo ./Quartzine/configd/install.sh
 ```
-
-You'll need a VM disk image (`.qcow2`) available before the VM mode works — see the config file (`configd/config.toml`) to point Quartzine at yours.
 
 ---
 
@@ -104,24 +84,17 @@ configd/uninstall.sh
 
 ## Status
 
-Early development, built and maintained solo. This is a learning project as much as a security tool — expect rough edges.
-
-**Working:**
-- [x] udev interception (blocks auto-mount before the OS touches the drive)
-- [x] USB passthrough to a QEMU/KVM VM
-
-**In progress / known issues:**
-- [ ] VM lifecycle management (snapshotting, cleanup between runs)
-- [ ] Headless/systemd VM display handling
-- [ ] Config loading edge cases
+Early development, built and maintained solo. This is a learning project as much as a security tool.
 
 **Planned:**
-- [ ] Host-side observation layer (eBPF/bpftrace)
-- [ ] Network isolation + traffic inspection
-- [ ] Report generation after a session
+- Host-side observation layer (eBPF/bpftrace)
+- Network isolation + traffic inspection
+- Report generation after a session
 
-> [!CAUTION]
-> Not ready for production use. The systemd service and VM mode are still being debugged — test on a disposable machine, not one you rely on.
+---
+
+> [!WARNING]
+> Not ready for production use yet but it does the job
 
 ---
 
