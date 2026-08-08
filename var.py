@@ -4,6 +4,14 @@ from enum import Enum
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
+
+def get_real_user_home():
+    sudo_user = os.environ.get("SUDO_USER")
+    if sudo_user:
+        return os.path.expanduser(f"~{sudo_user}")
+    return os.path.expanduser("~")
+
+
 config = {}
 
 with open(os.path.join(ROOT, "configd/config.toml"), "r") as file:
@@ -17,9 +25,11 @@ with open(os.path.join(ROOT, "configd/config.toml"), "r") as file:
 # L'utilisateur pourrait le specifier s'il veut sa propre distro
 # Pas encore intégré
 path_to_iso = ""
-config["path_to_virtual_disk"] = os.path.expanduser(config["path_to_virtual_disk"])
-config["project_root"] = os.path.expanduser(config["project_root"])
-
+if config["path_to_virtual_disk"].startswith("~"):
+    config["path_to_virtual_disk"] = config["path_to_virtual_disk"].replace("~", get_real_user_home(), 1)
+else:
+    config["path_to_virtual_disk"] = config["path_to_virtual_disk"]
+    
 class Error(Enum):
     MISSING_DEPENDENCY = 1
 
