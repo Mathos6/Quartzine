@@ -20,7 +20,7 @@ path_to_iso = ""
 
 
 # root of project
-project_root = "~/projects/Quartzine"
+project_root = "/opt/Quartzine"
 
 
 virtual_disk_size = "20G"

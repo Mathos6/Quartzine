@@ -49,4 +49,4 @@ def recently_mounted(dev: pyudev.device._device.Device) -> bool :
 
 
 def block_usb(dev: pyudev.device._device.Device):
-    subprocess.run(["/bin/bash", f"{project_root}/usb/block.sh", f"{dev.device_node}"])
+    subprocess.run(["/bin/bash", f"{config['project_root']}/usb/block.sh", f"{dev.device_node}"])

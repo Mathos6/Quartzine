@@ -1,3 +1,4 @@
+ 
 import subprocess
 import os
 import time
@@ -65,18 +66,24 @@ def create_virtual_disk():
     ])
 
 def install_vm():
-    subprocess.run([
-        "qemu-system-x86_64", "-enable-kvm",
+    user, uid = get_real_user()
+    
+    cmd = [
+        "qemu-system-x86_64", 
+        "-enable-kvm",
         "-m", config["ram_usage"],
         "-cdrom", config["path_to_iso"],
         "-drive", f"file={config['path_to_virtual_disk']},format=qcow2,if=virtio",
         "-boot", "d"
-    ])
+    ]
+    
+    run_as_user(user, uid, cmd)
 
 #TODO: when it'll be done, add the -snapshot flag'
 def run_vm_with_passthrough(dev):
     global last_time
-    subprocess.run([
+    user, uid = get_real_user()
+    cmd = [
         "qemu-system-x86_64",
         "-enable-kvm",
         "-snapshot",
@@ -86,7 +93,6 @@ def run_vm_with_passthrough(dev):
         "-device", "qemu-xhci",
         "-device", f"usb-host,vendorid=0x{dev.get('ID_VENDOR_ID')},productid=0x{dev.get('ID_MODEL_ID')}",
         "-drive", f"file={config['path_to_virtual_disk']},format=qcow2,if=virtio"
-
-    ])
-
+    ]
+    run_as_user(user, uid, cmd)
     var.last_time = time.time()
