@@ -1,7 +1,5 @@
-import subprocess
-import pwd
+
 from var import config
-import os
 from .mount_fs import mount_normally, mount_with_vm
 from vm.utils import get_real_user, run_as_user
 

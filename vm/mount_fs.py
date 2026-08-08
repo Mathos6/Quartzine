@@ -6,6 +6,8 @@ from var import config
 import var
 from vm.utils import get_real_user, run_as_user
 
+
+
 # device node peut être /dev/sda1
 def mount_normally(device_node):
     try:
@@ -17,12 +19,13 @@ def mount_normally(device_node):
 def mount_with_vm(dev):
     if not os.path.isfile(config["path_to_virtual_disk"]):
         print(f"There's no file named {config['path_to_virtual_disk']}. Please create one at this location")
+        user, uid = get_real_user()
         resp = run_as_user(
             user, 
             uid, 
             [
                 "zenity", 
-                "--question", 
+                "--question",
                 "--title=Quartzine",
                 "--text=L'image disque n'existe pas. Voulez-vous la créer maintenant ?"
             ]
