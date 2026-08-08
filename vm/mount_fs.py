@@ -16,13 +16,25 @@ def mount_normally(device_node):
 def mount_with_vm(dev):
     if not os.path.isfile(config["path_to_virtual_disk"]):
         print(f"There's no file named {config['path_to_virtual_disk']}. Please create one at this location")
-        resp = input("do you want to create a disk now? (yes, no)").lower()
-        if resp == "yes":
+        from vm.handle_device import run_as_user
+        resp = run_as_user(
+            user, 
+            uid, 
+            [
+                "zenity", 
+                "--question", 
+                "--title=Quartzine",
+                "--text=L'image disque n'existe pas. Voulez-vous la créer maintenant ?"
+            ]
+        )
+        
+        if resp.returncode == 0:
             create_virtual_disk()
-            print("Disk succesfully created at", config["path_to_virtual_disk"])
+            print("Disk successfully created at", config["path_to_virtual_disk"])
         else:
-            print("action aborted")
+            print("Action aborted")
             return
+            
     print("Checking virtual disk...")
     result = subprocess.run(
         ["virt-inspector", "-a", config["path_to_virtual_disk"]],
