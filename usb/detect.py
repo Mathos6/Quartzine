@@ -44,6 +44,7 @@ def recently_mounted(dev: pyudev.device._device.Device) -> bool :
 
     var.last_device = dev.get("ID_SERIAL")
     var.last_time = time.time()
+    print(f"{var.last_device} used at {var.last_time}")
     return False
 
 

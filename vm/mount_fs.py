@@ -64,6 +64,7 @@ def run_vm_with_passthrough(dev):
     subprocess.run([
         "qemu-system-x86_64",
         "-enable-kvm",
+        "-snapshot",
         "-m", config["ram_usage"],
         "-smp", config["cpu_cores"],
         "-cpu", "host",

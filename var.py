@@ -17,6 +17,8 @@ with open(os.path.join(ROOT, "configd/config.toml"), "r") as file:
 # L'utilisateur pourrait le specifier s'il veut sa propre distro
 # Pas encore intégré
 path_to_iso = ""
+config["path_to_virtual_disk"] = os.path.expanduser(config["path_to_virtual_disk"])
+config["project_root"] = os.path.expanduser(config["project_root"])
 
 class Error(Enum):
     MISSING_DEPENDENCY = 1
